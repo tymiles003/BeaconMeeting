@@ -11,7 +11,10 @@
   ***
 
 #####Meeting Coordinators 
- Meeting coordinators can go into the BeeconMeeting console and add events, times and resources. That information will be made available to people in the same meeting room. Assign different resources to different people or groups of people. BeeconMeetings is flexible.
+  • Meeting coordinators can go into the BeeconMeeting console and add events, times and resources.
+  • Information will be made available to anyone in the selected meeting room.
+  • Assign resources to individuals or groups. 
+  • BeeconMeetings is flexible and easy to use.
  
  
 #####Meeting Attendees
