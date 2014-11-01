@@ -7,11 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-typedef NS_ENUM(NSInteger, MeetingRoom){
-    MeetingRoomER,
-    MeetingRoomOR
-};
-@interface BeaconManager : NSObject
+#import "MeetingRoom.h"
 
-- (instancetype)initWithMeetingRoom:(MeetingRoom)room;
+@interface BeaconManager : NSObject
+@property (strong, nonatomic) MeetingRoom *meetingRoom;
+
+- (instancetype)initWithMajor:(NSNumber *)major;
 @end

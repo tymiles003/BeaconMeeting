@@ -10,23 +10,21 @@
 #import "BeaconManager.h"
 #import "ESTBeaconManager.h"
 
-NSString *const macAddress = @"fad429da6755";
-NSString *const proximityUUID = @"B9407F30-F5F8-466E-AFF9-25556B57FE6D";
 
-static CGFloat major = 26453;
-static CGFloat minor = 10714;
 
 @interface BeaconManager ()
 @property (strong, nonatomic) ESTBeaconManager *manager;
-@property (nonatomic) MeetingRoom meetingRoom;
+@property (strong, nonatomic) NSNumber *major;
 @end
 
 @implementation BeaconManager
-- (instancetype)initWithMeetingRoom:(MeetingRoom)room{
+- (instancetype)initWithMajor:(NSNumber *)major{
     self = [super init];
     if (self) {
-        _meetingRoom = room;
+        _major = major;
+
     }
     return self;
 }
+
 @end
