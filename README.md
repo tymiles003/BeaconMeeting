@@ -28,4 +28,4 @@
 
 <br>
 <br>
-*  *low energy bluetooth*
+ *\*low energy bluetooth*
