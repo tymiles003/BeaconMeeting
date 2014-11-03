@@ -43,7 +43,8 @@ install_resource()
       ;;
   esac
 }
-          install_resource "AWSiOSSDKv2/AWSCore/CognitoIdentity/Resources/cib-2014-06-30.json"
+          install_resource "AWSCognitoSync/CognitoSync/Resources/css-2014-06-30.json"
+                    install_resource "AWSiOSSDKv2/AWSCore/CognitoIdentity/Resources/cib-2014-06-30.json"
                     install_resource "AWSiOSSDKv2/AWSCore/MobileAnalyticsERS/Resources/mobileanalytics-2014-06-30.json"
                     install_resource "AWSiOSSDKv2/AWSCore/STS/Resources/sts-2011-06-15.json"
                     install_resource "AWSiOSSDKv2/AutoScaling/Resources/autoscaling-2011-01-01.json"

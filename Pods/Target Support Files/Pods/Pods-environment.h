@@ -6,6 +6,18 @@
 // project.
 
 
+// AWSCognitoSync
+#define COCOAPODS_POD_AVAILABLE_AWSCognitoSync
+#define COCOAPODS_VERSION_MAJOR_AWSCognitoSync 1
+#define COCOAPODS_VERSION_MINOR_AWSCognitoSync 0
+#define COCOAPODS_VERSION_PATCH_AWSCognitoSync 5
+
+// AWSCognitoSync/Cognito
+#define COCOAPODS_POD_AVAILABLE_AWSCognitoSync_Cognito
+#define COCOAPODS_VERSION_MAJOR_AWSCognitoSync_Cognito 1
+#define COCOAPODS_VERSION_MINOR_AWSCognitoSync_Cognito 0
+#define COCOAPODS_VERSION_PATCH_AWSCognitoSync_Cognito 5
+
 // AWSiOSSDKv2
 #define COCOAPODS_POD_AVAILABLE_AWSiOSSDKv2
 #define COCOAPODS_VERSION_MAJOR_AWSiOSSDKv2 2

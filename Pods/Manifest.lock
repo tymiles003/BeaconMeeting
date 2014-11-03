@@ -1,4 +1,9 @@
 PODS:
+  - AWSCognitoSync (1.0.5):
+    - AWSCognitoSync/Cognito
+    - AWSiOSSDKv2
+  - AWSCognitoSync/Cognito (1.0.5):
+    - AWSiOSSDKv2
   - AWSiOSSDKv2 (2.0.11):
     - AWSiOSSDKv2/AutoScaling
     - AWSiOSSDKv2/AWSCore
@@ -138,10 +143,12 @@ PODS:
   - XMLDictionary (1.4)
 
 DEPENDENCIES:
+  - AWSCognitoSync
   - AWSiOSSDKv2
   - EstimoteSDK
 
 SPEC CHECKSUMS:
+  AWSCognitoSync: 65ec9d97379b9f8dfa1791d4169c3b5c6476a834
   AWSiOSSDKv2: da3f88b7dd49ec12d918eb7c94bb4df5303374ee
   Bolts: 3db0a875235e0c9042b013af13af0f00f79b102c
   EstimoteSDK: 1a8184137ab16615b982efd0804aa711a0262ce7
