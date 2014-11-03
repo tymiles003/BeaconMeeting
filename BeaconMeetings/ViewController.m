@@ -13,6 +13,7 @@
 #import "ViewController.h"
 #import "ESTBeaconManager.h"
 #import "MeetingRoom.h"
+#import "RoomCloudManager.h"
 
 static NSString *appID = @"app_0gayndz1ej";
 static NSString *appToken = @"eb8f3cadc1e903b44b1da309baa6079e";
@@ -29,6 +30,7 @@ static NSString *appToken = @"eb8f3cadc1e903b44b1da309baa6079e";
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) NSMutableArray *beacons;
 @property (nonatomic, assign) CGFloat lastKnownDistance;
+@property (strong, nonatomic) NSMutableArray *rooms;
 @end
 
 
@@ -39,6 +41,10 @@ static NSString *appToken = @"eb8f3cadc1e903b44b1da309baa6079e";
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(didGetRoomInfo:) name:kRoomRequestDidFinishNotification object:nil];
+
+    [RoomCloudManager setUpCloudManager];
+    
     self.roomLabel.text = @"Room";
     self.beaconManager = [[ESTBeaconManager alloc] init];
     self.beaconManager.delegate = self;
@@ -55,11 +61,13 @@ static NSString *appToken = @"eb8f3cadc1e903b44b1da309baa6079e";
         self.occupancyLabel.text = @"Occupancy: --";
         self.availableLabel.text = @"Available: --";
     }else{
-        self.meetingRoom = [[MeetingRoom alloc]initWithMajor:_closestBeacon.major];
-        self.roomLabel.text = [NSString stringWithFormat:@"Your now in %@",self.meetingRoom.roomName];
-        self.occupancyLabel.text = [NSString stringWithFormat:@"Occupancy: %ld", (long)self.meetingRoom.availableSeating];
-        NSString *available = self.meetingRoom.available ? @"YES" : @"NO";
-        self.availableLabel.text = [NSString stringWithFormat:@"Available: %@", available];
+        self.meetingRoom = [self roomWithMajor:beacon.major];
+        if (self.meetingRoom) {
+            self.roomLabel.text = [NSString stringWithFormat:@"Your now in %@",self.meetingRoom.roomName];
+            self.occupancyLabel.text = [NSString stringWithFormat:@"Occupancy: %ld", (long)self.meetingRoom.availableSeating];
+            NSString *available = self.meetingRoom.available ? @"YES" : @"NO";
+            self.availableLabel.text = [NSString stringWithFormat:@"Available: %@", available];
+        }
     }
 
 }
@@ -227,5 +235,39 @@ static NSString *appToken = @"eb8f3cadc1e903b44b1da309baa6079e";
 }
 
 
+#pragma mark- Notifications
+- (void)didGetRoomInfo:(NSNotification *)notification{
+     NSLog(@"Notification from cloud manager");
+    if (notification.userInfo) {
+        self.rooms = [NSMutableArray array];
+        
+         NSLog(@"Recieved Update From S3\n\nUer Info:%@",notification.userInfo);
+        NSString *path = [NSTemporaryDirectory() stringByAppendingPathComponent:LocalFileName];
+        if([[NSFileManager defaultManager]fileExistsAtPath:path]){
+            NSData *data = [NSData dataWithContentsOfFile:path];
+            NSError *error;
+            NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&error];
+            if (json) {
+                 NSLog(@"ROOMS:\n%@",json);
+                NSArray *rooms = json[@"rooms"];
+                for (NSDictionary *roomData in rooms) {
+                    MeetingRoom *meetingRoom = [MeetingRoom meetingRoomWithDictionary:roomData];
+                    [self.rooms addObject:meetingRoom];
+                }
+            }
+            
+        }
+    }
+     NSLog(@"Meeting rooms:%@",self.rooms);
+}
+- (MeetingRoom *)roomWithMajor:(NSNumber *)major{
+    for (MeetingRoom *room in self.rooms) {
+        if ([room.major isEqualToNumber:major]) {
+            return room;
+            break;
+        }
+    }
+    return nil;
+}
 
 @end

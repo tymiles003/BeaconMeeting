@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3979358D1A0538D600451F07 /* RoomCloudManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3979358C1A0538D600451F07 /* RoomCloudManager.m */; };
 		B73133AA1A040A88006A54AF /* MeetingRoom.m in Sources */ = {isa = PBXBuildFile; fileRef = B73133A91A040A88006A54AF /* MeetingRoom.m */; };
 		B7D52F6519FDD89700C2F0E3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D52F6419FDD89700C2F0E3 /* main.m */; };
 		B7D52F6819FDD89700C2F0E3 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B7D52F6719FDD89700C2F0E3 /* AppDelegate.m */; };
@@ -32,6 +33,8 @@
 /* Begin PBXFileReference section */
 		0B1C68F3E8C9D3FF13537056 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		361BEB98A80257EC612D3715 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		3979358B1A0538D600451F07 /* RoomCloudManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomCloudManager.h; sourceTree = "<group>"; };
+		3979358C1A0538D600451F07 /* RoomCloudManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoomCloudManager.m; sourceTree = "<group>"; };
 		446B0BF94971A5E64CEA9428 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		B73133A81A040A88006A54AF /* MeetingRoom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeetingRoom.h; sourceTree = "<group>"; };
 		B73133A91A040A88006A54AF /* MeetingRoom.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeetingRoom.m; sourceTree = "<group>"; };
@@ -110,6 +113,8 @@
 				B7D52F8919FDD97200C2F0E3 /* BeaconManager.m */,
 				B73133A81A040A88006A54AF /* MeetingRoom.h */,
 				B73133A91A040A88006A54AF /* MeetingRoom.m */,
+				3979358B1A0538D600451F07 /* RoomCloudManager.h */,
+				3979358C1A0538D600451F07 /* RoomCloudManager.m */,
 				B7D52F6C19FDD89700C2F0E3 /* Main.storyboard */,
 				B7D52F6F19FDD89700C2F0E3 /* Images.xcassets */,
 				B7D52F7119FDD89700C2F0E3 /* LaunchScreen.xib */,
@@ -290,6 +295,7 @@
 			files = (
 				B7D52F6B19FDD89700C2F0E3 /* ViewController.m in Sources */,
 				B7D52F8A19FDD97200C2F0E3 /* BeaconManager.m in Sources */,
+				3979358D1A0538D600451F07 /* RoomCloudManager.m in Sources */,
 				B73133AA1A040A88006A54AF /* MeetingRoom.m in Sources */,
 				B7D52F6819FDD89700C2F0E3 /* AppDelegate.m in Sources */,
 				B7D52F6519FDD89700C2F0E3 /* main.m in Sources */,
