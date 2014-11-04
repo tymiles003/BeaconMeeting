@@ -42,10 +42,13 @@ static NSString *appToken = @"eb8f3cadc1e903b44b1da309baa6079e";
 - (void)viewDidLoad {
     [super viewDidLoad];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(didGetRoomInfo:) name:kRoomRequestDidFinishNotification object:nil];
-
+    
+    // initiates a request to our Amazon S3 account returning  meeting room data
     [RoomCloudManager setUpCloudManager];
     
     self.roomLabel.text = @"Room";
+    
+    // Beacon manager
     self.beaconManager = [[ESTBeaconManager alloc] init];
     self.beaconManager.delegate = self;
     self.lastKnownDistance = CGFLOAT_MAX;
@@ -56,6 +59,7 @@ static NSString *appToken = @"eb8f3cadc1e903b44b1da309baa6079e";
 
 }
 - (void)updateUIForBeacon:(ESTBeacon *)beacon{
+    // when we're to far no beacon is sent to this method - nil
     if (!beacon) {
         self.roomLabel.text = @"Not in a room";
         self.occupancyLabel.text = @"Occupancy: --";
@@ -89,20 +93,12 @@ static NSString *appToken = @"eb8f3cadc1e903b44b1da309baa6079e";
             [self.beaconManager startRangingBeaconsInRegion:self.region];
             NSLog(@"Starting Ranging");
         } else {
-            /*
-             * Request permission to use Location Services. (new in iOS 8)
-             * We ask for "always" authorization so that the Notification Demo can benefit as well.
-             * Also requires NSLocationAlwaysUsageDescription in Info.plist file.
-             *
-             * For more details about the new Location Services authorization model refer to:
-             * https://community.estimote.com/hc/en-us/articles/203393036-Estimote-SDK-and-iOS-8-Location-Services
-             */
             NSLog(@"Request Auth");
 
             [self.beaconManager requestAlwaysAuthorization];
         }
     }
-    else if([ESTBeaconManager authorizationStatus] == kCLAuthorizationStatusAuthorized)
+    else if([ESTBeaconManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways)
     {
         [self.beaconManager startRangingBeaconsInRegion:self.region];
         NSLog(@"Starting Ranging");
@@ -138,20 +134,36 @@ static NSString *appToken = @"eb8f3cadc1e903b44b1da309baa6079e";
 
     for (ESTBeacon *beacon in beacons) {
         CGFloat dist = [beacon.distance floatValue];
+        
+        // Check if theres a closer beacon than last check
         if (dist < _lastKnownDistance) {
+            // Set beacon as closest
             self.closestBeacon = beacon;
         }
-        NSLog(@"\n\nDistance :%f\nLast Distance:%f\n\n",dist,_lastKnownDistance);
+        
+        
+        // Add beacons with a distance
         if (![self.beacons containsObject:beacon] && dist > 0) {
             [self.beacons addObject:beacon];
+            
+            // remove any beacons in the array if the distance is < 0
         }else if ([self.beacons containsObject:beacon] && dist < 0){
             [self.beacons removeObject:beacon];
         }
+        
+        // Sort by distance
         [self.beacons sortedArrayUsingComparator:^NSComparisonResult(ESTBeacon *beacon1, ESTBeacon *beacon2) {
             return beacon1.distance < beacon2.distance;
         }];
+        
+        // Update the beacon list
         [self.tableView reloadData];
+        
+        // save this distance
         _lastKnownDistance = dist;
+        
+        
+        // Here we're deciding if all beacons are further than 1 distance. I came up with this number(1) through experimentation. Adjust as need...
         
         BOOL allAreFar = YES;
 
@@ -160,10 +172,12 @@ static NSString *appToken = @"eb8f3cadc1e903b44b1da309baa6079e";
                 allAreFar = NO;
             }
         }
-      
+      // After the loop, if the allAreFar flag is still YES, Update the UI with a nil beacon.
         if (allAreFar) {
             [self updateUIForBeacon:nil];
         }else{
+            
+            // Otherwise set the closest beacon and update the UI
             [self updateUIForBeacon:_closestBeacon];
         }
         
@@ -195,8 +209,7 @@ static NSString *appToken = @"eb8f3cadc1e903b44b1da309baa6079e";
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - tableview
-
+#pragma mark - tableview datasource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return self.beacons.count;
@@ -235,20 +248,24 @@ static NSString *appToken = @"eb8f3cadc1e903b44b1da309baa6079e";
 }
 
 
+#pragma mark- Cloud stuff
+
 #pragma mark- Notifications
 - (void)didGetRoomInfo:(NSNotification *)notification{
-     NSLog(@"Notification from cloud manager");
+    
+    // The room cloud manager sends this notification when it finishes receiving the latest Amazon S3 meeting room data. Data comes in as json and is saved to a device directory. Here I'm using the tmp dir,
     if (notification.userInfo) {
         self.rooms = [NSMutableArray array];
         
          NSLog(@"Recieved Update From S3\n\nUer Info:%@",notification.userInfo);
         NSString *path = [NSTemporaryDirectory() stringByAppendingPathComponent:LocalFileName];
+        
+        // Check the directory for data and parse int MeetingRoom objects
         if([[NSFileManager defaultManager]fileExistsAtPath:path]){
             NSData *data = [NSData dataWithContentsOfFile:path];
             NSError *error;
             NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:&error];
             if (json) {
-                 NSLog(@"ROOMS:\n%@",json);
                 NSArray *rooms = json[@"rooms"];
                 for (NSDictionary *roomData in rooms) {
                     MeetingRoom *meetingRoom = [MeetingRoom meetingRoomWithDictionary:roomData];
@@ -258,7 +275,6 @@ static NSString *appToken = @"eb8f3cadc1e903b44b1da309baa6079e";
             
         }
     }
-     NSLog(@"Meeting rooms:%@",self.rooms);
 }
 - (MeetingRoom *)roomWithMajor:(NSNumber *)major{
     for (MeetingRoom *room in self.rooms) {
